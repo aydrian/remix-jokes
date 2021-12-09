@@ -1,4 +1,4 @@
-import type { ActionFunction, LinksFunction } from "remix";
+import type { ActionFunction, LinksFunction, MetaFunction } from "remix";
 import { useActionData, json, Link, useSearchParams } from "remix";
 import { db } from "~/utils/db.server";
 import { createUserSession, login, register } from "~/utils/session.server";
@@ -6,6 +6,13 @@ import stylesUrl from "../styles/login.css";
 
 export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: stylesUrl }];
+};
+
+export const meta: MetaFunction = () => {
+  return {
+    title: "Remix Jokes | Login",
+    description: "Login to submit your own jokes to Remix Jokes!"
+  };
 };
 
 function validateUsername(username: unknown) {
@@ -63,14 +70,12 @@ export const action: ActionFunction = async ({ request }) => {
   switch (loginType) {
     case "login": {
       const user = await login({ username, password });
-      console.log({ user });
       if (!user) {
         return badRequest({
           fields,
           formError: `Username/Password combination is incorrect`
         });
       }
-      // if there is a user, create their session and redirect to /jokes
       return createUserSession(user.id, redirectTo);
     }
     case "register": {
@@ -83,7 +88,6 @@ export const action: ActionFunction = async ({ request }) => {
           formError: `User with username ${username} already exists`
         });
       }
-      // create the user
       const user = await register({ username, password });
       if (!user) {
         return badRequest({
@@ -91,7 +95,6 @@ export const action: ActionFunction = async ({ request }) => {
           formError: `Something went wrong trying to create a new user.`
         });
       }
-      // create their session and redirect to /jokes
       return createUserSession(user.id, redirectTo);
     }
     default: {
