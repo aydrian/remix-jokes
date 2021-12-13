@@ -1,4 +1,6 @@
-# Welcome to Remix!
+# Remix Jokes App Tutorial with CockroachDB Serverless
+
+This app is based on the [Remix Jokes App Tutorial](https://remix.run/docs/en/v1/tutorials/jokes) but uses [CockroachDB Serverless](https://www.cockroachlabs.com/product/) instead of SQLite for the database.
 
 - [Remix Docs](https://remix.run/docs)
 
